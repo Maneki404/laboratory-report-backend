@@ -1,29 +1,15 @@
-# Use the official OpenJDK 22 image as the base image
-FROM openjdk:22-jdk-alpine
+FROM ubuntu:latest AS build
 
-# Set the working directory in the container
-WORKDIR /app
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
+COPY . .
 
-# Copy the Gradle wrapper and build.gradle files
-COPY gradlew gradlew
-COPY gradle gradle
-COPY build.gradle settings.gradle ./
+RUN ./gradlew bootJar --no-daemon
 
-# Copy the source code
-COPY src src
+FROM openjdk:17-jdk-slim
 
-# Make Gradle wrapper executable
-RUN chmod +x gradlew
-
-# Build the application
-RUN ./gradlew build --no-daemon
-
-# Copy the built JAR file into the container
-COPY build/libs/*.jar app.jar
-
-# Expose the application port
 EXPOSE 8080
 
-# Run the JAR file
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+COPY --from=build /build/libs/demo-1.jar app.jar
 
+ENTRYPOINT ["java", "-jar", "app.jar"]
