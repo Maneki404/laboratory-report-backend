@@ -4,10 +4,10 @@ FROM openjdk:17-jdk-slim as build
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the Gradle wrapper and build.gradle files
+# Copy the Gradle wrapper and build files
 COPY gradlew gradlew
 COPY gradle gradle
-COPY build.gradle settings.gradle ./
+COPY build.gradle.kts settings.gradle.kts ./
 
 # Copy the source code
 COPY src src
