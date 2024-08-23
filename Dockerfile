@@ -1,10 +1,5 @@
-FROM ubuntu:latest
-LABEL authors="aslisahin"
-
-ENTRYPOINT ["top", "-b"]
-
-# Use the official OpenJDK 22 image as the base image
-FROM openjdk:17-jdk-slim
+# Start with an official OpenJDK 17 image as the base image
+FROM openjdk:17-jdk-slim as build
 
 # Set the working directory in the container
 WORKDIR /app
@@ -21,10 +16,16 @@ COPY src src
 RUN chmod +x gradlew
 
 # Build the application
-RUN ./gradlew build --no-daemon
+RUN ./gradlew bootJar --no-daemon
 
-# Copy the built JAR file into the container
-COPY build/libs/*.jar app.jar
+# Stage 2: Build the runtime image
+FROM openjdk:17-jdk-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the built JAR file from the build stage
+COPY --from=build /app/build/libs/*.jar app.jar
 
 # Expose the application port
 EXPOSE 8080
