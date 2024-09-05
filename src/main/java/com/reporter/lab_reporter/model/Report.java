@@ -13,7 +13,7 @@ public class Report {
 
     private String firstName;
     private String secondName;
-    private int idNumber;
+    private Long idNumber;
     private String diagnosisTitle;
     private String diagnosisDetails;
     private String photoUrl;
@@ -23,7 +23,7 @@ public class Report {
     }
 
     //Constructor
-    public Report(String firstName, String secondName, int IDNumber, String diagnosisTitle,
+    public Report(String firstName, String secondName, Long IDNumber, String diagnosisTitle,
                   String diagnosisDetails, String photoUrl) {
         this.firstName = firstName;
         this.secondName = secondName;
@@ -58,11 +58,11 @@ public class Report {
         this.secondName = secondName;
     }
 
-    public int getIdNumber() {
+    public Long getIdNumber() {
         return idNumber;
     }
 
-    public void setIdNumber(int idNumber) {
+    public void setIdNumber(Long idNumber) {
         this.idNumber = idNumber;
     }
 
